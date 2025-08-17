@@ -1,0 +1,12 @@
+[submodule "RESTTube-comment-service"]
+	path = RESTTube-comment-service
+	url = https://github.com/Joel0423/RESTTube-comment-service.git
+[submodule "RESTTube-frontend"]
+	path = RESTTube-frontend
+	url = https://github.com/Joel0423/RESTTube-frontend.git
+[submodule "RESTtube-user-management-service"]
+	path = RESTtube-user-management-service
+	url = https://github.com/Joel0423/RESTtube-user-management-service.git
+[submodule "RESTTube-videostream-service"]
+	path = RESTTube-videostream-service
+	url = https://github.com/Joel0423/RESTTube-videostream-service.git
