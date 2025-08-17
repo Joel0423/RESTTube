@@ -1,0 +1,97 @@
+version: '3.8'
+services:
+  frontend-service:
+    build: ./RESTTube-frontend
+    depends_on:
+      - video-service
+      - comment-service
+      - user-management
+    ports:
+      - "8003:8000"
+    volumes:
+      - ./RESTTube-frontend/app:/app/app
+  comment-db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: commentservice
+    ports:
+      - "3308:3306"
+    volumes:
+      - comment_db_data:/var/lib/mysql
+
+  comment-service:
+    build: ./RESTTube-comment-service
+    depends_on:
+      - comment-db
+      - user-management
+    environment:
+      DB_HOST: comment-db
+      DB_USER: root
+      DB_PASSWORD: password
+      DB_NAME: commentservice
+      DB_PORT: 3306
+    ports:
+      - "8002:8000"
+    volumes:
+      - ./RESTTube-comment-service:/app
+  user-management-db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: userdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - user_management_db_data:/var/lib/mysql
+
+  user-management:
+    build: ./RESTTube-user-management-service
+    depends_on:
+      - user-management-db
+    environment:
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_DB: userdb
+      MYSQL_HOST: user-management-db
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./RESTTube-user-management-service/app:/app
+
+  video-db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: videoservice
+    ports:
+      - "3307:3306"
+    volumes:
+      - video_db_data:/var/lib/mysql
+
+  video-service:
+    build: ./RESTTube-videostream-service
+    depends_on:
+      - video-db
+      - user-management
+    environment:
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+      MYSQL_HOST: video-db
+      MYSQL_DB: videoservice
+      STATIC_DIR: /data/static
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./static:/data/static
+      - ./RESTTube-videostream-service/app:/app/app
+
+volumes:
+  user_management_db_data:
+  video_db_data:
+  comment_db_data:

@@ -1,0 +1,16 @@
+# Ignore Python virtual environments
+venv/
+**/venv/
+
+# Ignore Python cache
+__pycache__/
+**/__pycache__/
+
+# Ignore inner .git folders
+**/.git/
+
+# Ignore other common files
+*.pyc
+*.pyo
+*.pyd
+
